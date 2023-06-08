@@ -16,7 +16,20 @@ export default {
 		const browser = await puppeteer.launch(env.MYBROWSER);
 		const page = await browser.newPage();
 		await page.setViewport({ width: 1920, height: 1080 });
+
+		const trim = (url: string): string => {
+			const max = 100
+			if (url.length <= max) {
+				return url
+			}
+			return url.slice(0, max) + "..."
+		}
+
+		page.on("response", (resp) => console.log(`${resp.request().method()} ${trim(resp.url())} ${resp.status()}`))
 		await page.goto(url);
+		// page.on("response", (resp) => console.log(`afeter: ${resp.request().method()} ${resp.url()} ${resp.status()}`))
+		page.on("console", (msg) => console.log("PAGE LOG:", msg.text()))
+
 		const useMetrics = searchParams.get("metrics");
 		if (useMetrics) {
 			const metrics = await page.metrics();
