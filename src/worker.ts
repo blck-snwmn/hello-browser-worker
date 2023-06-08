@@ -17,6 +17,12 @@ export default {
 		const page = await browser.newPage();
 		await page.setViewport({ width: 1920, height: 1080 });
 		await page.goto(url);
+		const useMetrics = searchParams.get("metrics");
+		if (useMetrics) {
+			const metrics = await page.metrics();
+			await browser.close();
+			return new Response(JSON.stringify(metrics));
+		}
 		const img = (await page.screenshot()) as Buffer;
 		await browser.close();
 		return new Response(img, {
