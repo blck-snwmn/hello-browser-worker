@@ -26,9 +26,9 @@ export default {
 		}
 
 		page.on("response", (resp) => console.log(`${resp.request().method()} ${trim(resp.url())} ${resp.status()}`))
+		page.on("console", (msg) => console.log(`PAGE LOG: type=${msg.type()}, message='${msg.text()}'`))
+		page.on("pageerror", (err) => console.log(`PAGE ERROR: ${err.toString()}`))
 		await page.goto(url);
-		// page.on("response", (resp) => console.log(`afeter: ${resp.request().method()} ${resp.url()} ${resp.status()}`))
-		page.on("console", (msg) => console.log("PAGE LOG:", msg.text()))
 
 		const useMetrics = searchParams.get("metrics");
 		if (useMetrics) {
