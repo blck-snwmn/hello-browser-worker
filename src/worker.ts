@@ -23,6 +23,16 @@ export default {
 			await browser.close();
 			return new Response(JSON.stringify(metrics));
 		}
+		const useContent = searchParams.get("content");
+		if (useContent) {
+			const content = await page.content()
+			await browser.close();
+			return new Response(content, {
+				headers: {
+					"content-type": "text/html;",
+				},
+			});
+		}
 		const img = (await page.screenshot()) as Buffer;
 		await browser.close();
 		return new Response(img, {
