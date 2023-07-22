@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer';
+globalThis.Buffer = Buffer
 import puppeteer from "@cloudflare/puppeteer";
 
 export interface Env {
@@ -46,6 +48,18 @@ export default {
 				},
 			});
 		}
+		const usePdf = searchParams.get("pdf");
+		if (usePdf) {
+			console.log("pdf")
+			const pdf = await page.pdf();
+			await browser.close();
+			return new Response(pdf, {
+				headers: {
+					"content-type": "application/pdf",
+				},
+			});
+		}
+
 		const img = (await page.screenshot()) as Buffer;
 		await browser.close();
 		return new Response(img, {
